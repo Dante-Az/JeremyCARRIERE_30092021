@@ -1,15 +1,6 @@
-// convertir le prix
-function convertPrice(productPrice) {
-    let price = `${productPrice}`;
-    // constructor pour formater des nombres en fonction de la locale (fr).
-    price = Intl.NumberFormat("fr-FR", {
-        style: "currency",
-        currency: "EUR",
-        // minimumFractionDigits indique le nombre minimum de chiffres de fraction à utiliser
-        minimumFractionDigits: 2,
-    }).format(price / 100);
-    return price;
-};
+// On recupere l'url de l'api grâce à fetch
+// Le 1er then transforme la réponse en json
+// Le 2ème affiche les données dans la fonction addCards
 getArticles();
 
 function getArticles()  {
@@ -30,17 +21,33 @@ function getArticles()  {
             // convertit le prix
             const price = convertPrice(product.price);
 
-            //insérer le HTML dans le document
-            card.innerHTML += `
-            <a href="./product.html?id=${product._id}">
-            <article>
-              <img src="${product.imageUrl}" alt="${product.altTxt}">
-              <h3 class="productName">${product.name}</h3>
-              <p class="productDescription">${product.description}</p>
-            </article>
-          </a>`
+            let productLink = document.createElement("a");
+            document.getElementById("items").appendChild(productLink);
+            productLink.href = `./product.html?id=${product._id}`;
+
+            let productArticle = document.createElement("article");
+            productLink.appendChild(productArticle);
+            
+            let productImg = document.createElement("img");
+            productArticle.appendChild(productImg);
+            productImg.src = `${product.imageUrl}`;
+            productImg.alt = `${product.altTxt}`;
+
+            let productName = document.createElement("h3");
+            productArticle.appendChild(productName);
+            productName.classList.add("productName");
+            productName.innerHTML = `${product.name}`;
+
+            let productDescription = document.createElement("p");
+            productArticle.appendChild(productDescription);
+            productDescription.classList.add("productDescription");
+            productDescription.innerHTML = `${product.description}`;
+
+            let productPrice = document.createElement("span");
+            productArticle.appendChild(productPrice);
+            productPrice.innerHTML = `${price}`;
         }
     }    
 }
- 
+
     
