@@ -87,7 +87,30 @@ for (product of storedProduct) {
     totalPrice.innerHTML = `${convertPrice(totalPriceDisplay())}`;
 
 }
+// Gestion du bouton de suppression
 
+let deleteItem = document.querySelectorAll(".deleteItem");
+console.log(deleteItem);
+
+for (let i = 0; i < deleteItem.length; i++){
+    deleteItem[i].addEventListener("click", (event) =>{
+        event.preventDefault();
+
+        // on sélectionne l'id et la couleur du produit qui va être supprimé en appuyant sur le bouton
+        let deletedName = storedProduct[i].name;
+        let deletedColor = storedProduct[i].color;
+        console.log("deletedName");
+        console.log(deletedName);
+
+        // Méthode "filter" pour supprimer l'élément du tableau
+        storedProduct = storedProduct.filter( obj => obj.name !== deletedName || obj.color !== deletedColor);
+        console.log(storedProduct);
+
+        // Mise à jour du local storage
+        localStorage.setItem("produit", JSON.stringify(storedProduct));
+        location.reload();
+    })
+}
 
 console.log(storedProduct);
 console.log(product);
