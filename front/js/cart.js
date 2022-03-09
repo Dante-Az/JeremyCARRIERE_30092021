@@ -1,6 +1,5 @@
 let storedProduct = JSON.parse(localStorage.getItem("produit"));
 
-
 // calcul du total
 function totalPriceDisplay() {
     let totalPrice = 0;
@@ -9,7 +8,7 @@ function totalPriceDisplay() {
 }
 function totalQuantityDisplay() {
     let totalQuantity = 0
-    storedProduct.forEach(product => totalQuantity += product.quantity);
+    storedProduct.forEach(product => totalQuantity += parseInt(product.quantity));
     return totalQuantity;
 }
 
@@ -80,6 +79,7 @@ for (product of storedProduct) {
     productCartContentSettingsDeleteP.classList.add("deleteItem");
     productCartContentSettingsDeleteP.innerHTML = "Supprimer";
 
+
     let totalQuantity = document.getElementById("totalQuantity");
     totalQuantity.innerHTML = totalQuantityDisplay();
 
@@ -95,22 +95,48 @@ console.log(deleteItem);
 for (let i = 0; i < deleteItem.length; i++){
     deleteItem[i].addEventListener("click", (event) =>{
         event.preventDefault();
-
-        // on sélectionne l'id et la couleur du produit qui va être supprimé en appuyant sur le bouton
-        let deletedName = storedProduct[i].name;
-        let deletedColor = storedProduct[i].color;
-        console.log("deletedName");
-        console.log(deletedName);
-
+        delItm();
+    })
+    
+    // on sélectionne l'id et la couleur du produit qui va être supprimé en appuyant sur le bouton
+    let deletedName = storedProduct[i].name;
+    let deletedColor = storedProduct[i].color;
+    console.log("deletedName");
+    console.log(deletedName);
+    function delItm(){
         // Méthode "filter" pour supprimer l'élément du tableau
         storedProduct = storedProduct.filter( obj => obj.name !== deletedName || obj.color !== deletedColor);
         console.log(storedProduct);
-
+       
         // Mise à jour du local storage
         localStorage.setItem("produit", JSON.stringify(storedProduct));
         location.reload();
+        alert("Vous avez supprimé ce produit")
+        }
+}
+// Ecoute du changement de quantité de produit
+
+let quantityChange = document.querySelectorAll(".itemQuantity");
+
+for (let j = 0; j < quantityChange.length; j ++){
+    quantityChange[j].addEventListener("change", () =>{
+        
+        storedProduct[j].quantity = quantityChange[j].value;
+        
+        if(quantityChange[j].value == 0){
+            let deletedName = storedProduct[j].name;
+            let deletedColor = storedProduct[j].color;
+            // Méthode "filter" pour supprimer l'élément du tableau
+            storedProduct = storedProduct.filter( obj => obj.name !== deletedName || obj.color !== deletedColor);
+            // Mise à jour du local storage
+            localStorage.setItem("produit", JSON.stringify(storedProduct));
+            location.reload();
+            alert("Vous avez supprimé ce produit")
+        }else{
+        localStorage.setItem("produit", JSON.stringify(storedProduct));
+        location.reload();
+    }
     })
 }
 
 console.log(storedProduct);
-console.log(product);

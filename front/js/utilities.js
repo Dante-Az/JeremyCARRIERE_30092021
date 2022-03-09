@@ -12,8 +12,3 @@ function convertPrice(productPrice) {
     }).format(price);
     return price;
 };
-
-// supprimer le Panier grace à la méthode clear()
-function clearPanier() {
-    localStorage.clear();
-}

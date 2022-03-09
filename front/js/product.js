@@ -10,7 +10,6 @@ const productDescription = document.getElementById("description");
 let colorChoice = document.getElementById("colors");
 const quantity = document.getElementById("quantity");
 
-
 main ()
 function main(){
     getArticle();
@@ -71,7 +70,7 @@ function getArticle() {
 
     //Gestion du local storage
     const addToCartBtn = document.getElementById("addToCart");
-            // Bonton événement pour rajouter la ou les articles
+            // Bouton événement pour rajouter la ou les articles
             addToCartBtn.addEventListener("click", (e) => {
                 e.preventDefault();
                     let productOption = {
@@ -86,6 +85,7 @@ function getArticle() {
                     };
     //Déclaration de la variable dans laquelle on met les clés et les valeurs qui sont dans le localstorage
     let addedProduct = JSON.parse(localStorage.getItem("produit")) || [];
+    console.log(addedProduct)
     //JSON.parse sert à convertir les données au format JSON qui sont sur le local storage en objet Javacript
                     
     //On vérifie s'il y a déja des produits enregistrés dans le localStorage
@@ -97,17 +97,23 @@ function getArticle() {
             indexModification = addedProduct.indexOf(products);
         }
     }
-    //S'il est déjà présent
-    if (isAlreadyPresent) {
-        addedProduct[indexModification].quantity += productOption.quantity;
-        localStorage.setItem("produit", JSON.stringify(addedProduct));
-        console.log(addedProduct);
-        console.log(isAlreadyPresent)
-        //S'il n'est pas présent
-    }else {
-        addedProduct.push(productOption);
-        localStorage.setItem("produit", JSON.stringify(addedProduct));
-        console.log(addedProduct);
-        console.log(isAlreadyPresent)
-    }
+    let ddl = document.getElementById("colors");
+    let selectedValue = ddl.options[ddl.selectedIndex].value;
+        if (selectedValue == "") {
+            alert ("Veuillez choisir une couleur")
+        //S'il est déjà présent   
+        } else if (isAlreadyPresent) {
+            addedProduct[indexModification].quantity += productOption.quantity;
+            localStorage.setItem("produit", JSON.stringify(addedProduct));
+            console.log(addedProduct);
+            console.log(isAlreadyPresent)
+            alert("Le produit a bien été ajouté au panier");
+            //S'il n'est pas présent
+        }else {
+            addedProduct.push(productOption);
+            localStorage.setItem("produit", JSON.stringify(addedProduct));
+            console.log(addedProduct);
+            console.log(isAlreadyPresent)
+            alert("Le produit a bien été ajouté au panier");
+        }
 })   
