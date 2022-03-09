@@ -98,9 +98,11 @@ function getArticle() {
         }
     }
     let ddl = document.getElementById("colors");
-    let selectedValue = ddl.options[ddl.selectedIndex].value;
-        if (selectedValue == "") {
-            alert ("Veuillez choisir une couleur")
+    let ddn = document.getElementById("quantity")
+    let selectedColor = ddl.options[ddl.selectedIndex].value;
+    let selectedValue = ddn.value;
+        if (selectedColor == "" || selectedValue == 0 ) {
+            alert ("Veuillez choisir une couleur et une quantité")
         //S'il est déjà présent   
         } else if (isAlreadyPresent) {
             addedProduct[indexModification].quantity += productOption.quantity;
