@@ -1,16 +1,27 @@
 let storedProduct = JSON.parse(localStorage.getItem("produit"));
 
-// calcul du total
+//Affichage du total
+
+//Calcul du prix
 function totalPriceDisplay() {
     let totalPrice = 0;
-    storedProduct.forEach(product => totalPrice += product.price * product.quantity);
+    storedProduct.forEach(product => totalPrice += product.price * product.quantity); 
     return totalPrice;
 }
+//Calcul de la quantité
 function totalQuantityDisplay() {
     let totalQuantity = 0
-    storedProduct.forEach(product => totalQuantity += parseInt(product.quantity));
+    storedProduct.forEach(product => totalQuantity += parseInt(product.quantity)); 
     return totalQuantity;
 }
+//Fonction pour actualiser le prix et le nombre d'articles
+function actuTotal() {
+    totalPriceDisplay();
+    totalQuantityDisplay();
+    document.getElementById("totalQuantity").innerHTML = totalQuantityDisplay();
+    document.getElementById("totalPrice").innerHTML = `${convertPrice(totalPriceDisplay())}`;
+}
+
 
 for (product of storedProduct) {
     const price = convertPrice(product.price);
@@ -20,6 +31,7 @@ for (product of storedProduct) {
     cartItem.appendChild(productArticle);
     productArticle.classList.add("cart__item");
     productArticle.setAttribute("data-id", `${product._id}`);
+    productArticle.setAttribute("data-color", `${product.color}`);
     
 
     let productCartImg = document.createElement("div");
@@ -43,7 +55,11 @@ for (product of storedProduct) {
 
     let productName = document.createElement("h2");
     productCartContentPrice.appendChild(productName);
-    productName.innerHTML = `${product.name}` + '(' + (`${product.color}`) + ')';
+    productName.innerHTML = `${product.name}`;
+
+    let productColor = document.createElement("p");
+    productName.appendChild(productColor);
+    productColor.innerHTML = `(${product.color})`
 
     let productPrice = document.createElement("p");
     productCartContentPrice.appendChild(productPrice);
@@ -99,19 +115,25 @@ for (let i = 0; i < deleteItem.length; i++){
     })
     
     // on sélectionne l'id et la couleur du produit qui va être supprimé en appuyant sur le bouton
-    let deletedName = storedProduct[i].name;
+    let deletedId = storedProduct[i]._id;
     let deletedColor = storedProduct[i].color;
-    console.log("deletedName");
-    console.log(deletedName);
+
     function delItm(){
         // Méthode "filter" pour supprimer l'élément du tableau
-        storedProduct = storedProduct.filter( obj => obj.name !== deletedName || obj.color !== deletedColor);
+        storedProduct = storedProduct.filter( obj => obj._id !== deletedId || obj.color !== deletedColor);
         console.log(storedProduct);
        
         // Mise à jour du local storage
+        document.querySelector(`[data-id='${deletedId}']` && `[data-color='${deletedColor}']`).remove();
         localStorage.setItem("produit", JSON.stringify(storedProduct));
-        location.reload();
-        alert("Vous avez supprimé ce produit")
+        actuTotal();
+        new Swal({
+            title: "Le produit a bien été supprimé",
+            icon: "success",
+            iconColor: "#3498db",
+            showConfirmButton: false,
+            timer: 2000,
+          });
         }
 }
 // Ecoute du changement de quantité de produit
@@ -124,21 +146,32 @@ for (let j = 0; j < quantityChange.length; j ++){
         storedProduct[j].quantity = quantityChange[j].value;
         
         if(quantityChange[j].value == 0){
-            let deletedName = storedProduct[j].name;
+            let deletedId = storedProduct[j].name;
             let deletedColor = storedProduct[j].color;
             // Méthode "filter" pour supprimer l'élément du tableau
-            storedProduct = storedProduct.filter( obj => obj.name !== deletedName || obj.color !== deletedColor);
+            storedProduct = storedProduct.filter( obj => obj.name !== deletedId || obj.color !== deletedColor);
+            console.log(storedProduct);
             // Mise à jour du local storage
+            document.querySelector(`[data-id='${deletedId}']` && `[data-color='${deletedColor}']`).remove();
             localStorage.setItem("produit", JSON.stringify(storedProduct));
-            location.reload();
-            alert("Vous avez supprimé ce produit")
+            actuTotal();
+            new Swal({
+                title: "Le produit a bien été supprimé",
+                icon: "success",
+                iconColor: "#3498db",
+                showConfirmButton: false,
+                timer: 2000,
+              });
         }else{
         localStorage.setItem("produit", JSON.stringify(storedProduct));
-        location.reload();
+        actuTotal();
+        //location.reload();
     }
     })
 }
 console.log(storedProduct);
+console.log(totalPrice);
+console.log(totalQuantity);
 
 // Mise en place des RegEx
 const order = document.getElementById("order");
