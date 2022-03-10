@@ -138,5 +138,64 @@ for (let j = 0; j < quantityChange.length; j ++){
     }
     })
 }
-
 console.log(storedProduct);
+
+// Mise en place des RegEx
+const order = document.getElementById("order");
+console.log(order);
+
+//Validation du formulaire
+const firstNameRegEx =/^([a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+)$/gmi;
+const lastNameRegEx = /^((?:[ ]?[a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+)+)$/gmi;
+//const addressRegEx =
+//const cityRegEx =
+//const emailRegEx =
+
+order.addEventListener("click", (event) => {
+    // Infos à envoyer en POST
+    let contact = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        address: document.getElementById("address").value,
+        city: document.getElementById("city").value,
+        email: document.getElementById("email").value,
+    };
+
+    // Vérification des informations saisies
+    if (
+        (firstNameRegEx.test(contact.firstName) == true) &
+        (lastNameRegEx.test(contact.lastName) == true) &
+        (addressRegEx.test(contact.address) == true) &
+        (cityRegEx.test(contact.city) == true) &
+        (email.test(contact.email) == true) 
+        ){
+        // Empêcher le rechargement de la page
+        event.preventDefault();
+
+        let products = [];
+        for (listId of storedProduct) {
+            products.push(listId.id)
+        }
+
+        // Envoi en POST les produits sélectionnés et le formulaire
+        fetch("http://localhost:3000/api/products/order", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                contact,
+                products
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            localStorage.setItem("order", JSON.stringify(data));
+            document.location.href = "confirmation.html";
+        })
+        .catch(erreur => console.log("erreur : " + erreur));
+    }else{
+        alert("Certaines informations saisies ne sont pas conformes");
+    }
+})
