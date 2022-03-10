@@ -13,7 +13,6 @@ const quantity = document.getElementById("quantity");
 main ()
 function main(){
     getArticle();
-;
 }
 
 function getArticle() {
@@ -85,9 +84,9 @@ function getArticle() {
                     };
     //Déclaration de la variable dans laquelle on met les clés et les valeurs qui sont dans le localstorage
     let addedProduct = JSON.parse(localStorage.getItem("produit")) || [];
-    console.log(addedProduct)
+    console.log(addedProduct);
     //JSON.parse sert à convertir les données au format JSON qui sont sur le local storage en objet Javacript
-                    
+                   
     //On vérifie s'il y a déja des produits enregistrés dans le localStorage
     let isAlreadyPresent = false;
     let indexModification;
@@ -97,13 +96,10 @@ function getArticle() {
             indexModification = addedProduct.indexOf(products);
         }
     }
-    let ddl = document.getElementById("colors");
-    let ddn = document.getElementById("quantity")
-    let selectedColor = ddl.options[ddl.selectedIndex].value;
-    let selectedValue = ddn.value;
-    // Si l'utilisateur a oublié de choisir une couleur
-    if (selectedColor == "") {
-        //alert ("Veuillez choisir une couleur et une quantité")
+    //Fonction qui va servir à vérifier que les champs couleur et quantité sont renseigné
+    function invalidInputCheck(){ 
+    //Si l'utilisateur a oublié de choisir une couleur
+    if (productOption.color == "") {
         new Swal({
             title: "Veuillez choisir une couleur valide",
             icon: "error",
@@ -111,23 +107,29 @@ function getArticle() {
             showConfirmButton: false,
             timer: 2000,
           });
-        }else if (selectedValue == 0 || selectedValue == ""){  
+        //Si l'utilisateur a oublié de choisir une quantité 
+        }else if (productOption.quantity == 0 || productOption.quantity == ""){  
             new Swal({
                 title: "Veuillez choisir une quantité",
                 icon: "error",
                 iconColor: "#3498db",
                 showConfirmButton: false,
                 timer: 2000,
-              });
+              })
+        }else{
+            setToCart();
+            }      
+        };
+        //Fonction qui envoie l'objet au LocalStorage
+        function setToCart(){    
         //S'il est déjà présent   
-        }else if (isAlreadyPresent) {
+        if (isAlreadyPresent) {
             addedProduct[indexModification].quantity += productOption.quantity;
             localStorage.setItem("produit", JSON.stringify(addedProduct));
             console.log(addedProduct);
             console.log(isAlreadyPresent)
-            //alert("Le produit a bien été ajouté au panier");
             new Swal({
-                title: "Votre produit à bien été ajouté au panier",
+                title: "La quantité désirée a été mise à jour",
                 icon: "success",
                 iconColor: "#3498db",
                 showConfirmButton: false,
@@ -139,7 +141,6 @@ function getArticle() {
             localStorage.setItem("produit", JSON.stringify(addedProduct));
             console.log(addedProduct);
             console.log(isAlreadyPresent)
-            //alert("Le produit a bien été ajouté au panier");
             new Swal({
                 title: "Votre produit à bien été ajouté au panier",
                 icon: "success",
@@ -147,5 +148,7 @@ function getArticle() {
                 showConfirmButton: false,
                 timer: 2000,
               });
-        }
+            }
+        }    
+    invalidInputCheck();
 })   
