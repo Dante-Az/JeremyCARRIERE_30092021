@@ -101,21 +101,51 @@ function getArticle() {
     let ddn = document.getElementById("quantity")
     let selectedColor = ddl.options[ddl.selectedIndex].value;
     let selectedValue = ddn.value;
-        if (selectedColor == "" || selectedValue == 0 ) {
-            alert ("Veuillez choisir une couleur et une quantité")
+    // Si l'utilisateur a oublié de choisir une couleur
+    if (selectedColor == "") {
+        //alert ("Veuillez choisir une couleur et une quantité")
+        new Swal({
+            title: "Veuillez choisir une couleur valide",
+            icon: "error",
+            iconColor: "#3498db",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+        }else if (selectedValue == 0 || selectedValue == ""){  
+            new Swal({
+                title: "Veuillez choisir une quantité",
+                icon: "error",
+                iconColor: "#3498db",
+                showConfirmButton: false,
+                timer: 2000,
+              });
         //S'il est déjà présent   
-        } else if (isAlreadyPresent) {
+        }else if (isAlreadyPresent) {
             addedProduct[indexModification].quantity += productOption.quantity;
             localStorage.setItem("produit", JSON.stringify(addedProduct));
             console.log(addedProduct);
             console.log(isAlreadyPresent)
-            alert("Le produit a bien été ajouté au panier");
+            //alert("Le produit a bien été ajouté au panier");
+            new Swal({
+                title: "Votre produit à bien été ajouté au panier",
+                icon: "success",
+                iconColor: "#3498db",
+                showConfirmButton: false,
+                timer: 2000,
+              });
             //S'il n'est pas présent
         }else {
             addedProduct.push(productOption);
             localStorage.setItem("produit", JSON.stringify(addedProduct));
             console.log(addedProduct);
             console.log(isAlreadyPresent)
-            alert("Le produit a bien été ajouté au panier");
+            //alert("Le produit a bien été ajouté au panier");
+            new Swal({
+                title: "Votre produit à bien été ajouté au panier",
+                icon: "success",
+                iconColor: "#3498db",
+                showConfirmButton: false,
+                timer: 2000,
+              });
         }
 })   
