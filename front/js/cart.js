@@ -22,7 +22,6 @@ function actuTotal() {
     document.getElementById("totalPrice").innerHTML = `${convertPrice(totalPriceDisplay())}`;
 }
 
-
 for (product of storedProduct) {
     const price = convertPrice(product.price);
     let cartItem = document.getElementById("cart__items")
@@ -113,7 +112,7 @@ for (let i = 0; i < deleteItem.length; i++){
         event.preventDefault();
         delItm();
     })
-    
+
     // on sélectionne l'id et la couleur du produit qui va être supprimé en appuyant sur le bouton
     let deletedId = storedProduct[i]._id;
     let deletedColor = storedProduct[i].color;
@@ -165,7 +164,6 @@ for (let j = 0; j < quantityChange.length; j ++){
         }else{
         localStorage.setItem("produit", JSON.stringify(storedProduct));
         actuTotal();
-        //location.reload();
     }
     })
 }
