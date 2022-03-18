@@ -1,5 +1,16 @@
 let storedProduct = JSON.parse(localStorage.getItem("produit"));
 
+function convertPrice(productPrice) {
+    let price = `${productPrice}`;
+    // constructor pour formater des nombres en fonction de la locale (fr).
+    price = Intl.NumberFormat("fr-FR", {
+        style: "currency",
+        currency: "EUR",
+        // minimumFractionDigits indique le nombre minimum de chiffres de fraction à utiliser
+        minimumFractionDigits: 2,
+    }).format(price);
+    return price;
+};
 //Affichage du total
 
 //Calcul du prix
@@ -177,12 +188,15 @@ console.log(order);
 
 //Validation du formulaire
 const firstNameRegEx =/^([a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+)$/gmi;
-const lastNameRegEx = /^((?:[ ]?[a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+)+)$/gmi;
-//const addressRegEx =
-//const cityRegEx =
-//const emailRegEx =
+const lastNameRegEx = /^(([a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+)+)$/gmi;
+const addressRegEx = /^[a-zA-Z0-9\s,.'-]{3,}$/gmi;
+const cityRegEx = /^([a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+(?:. |-| |'))*[a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]*$/gmi
+const emailRegEx = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
 
 order.addEventListener("click", (event) => {
+    // Empêcher le rechargement de la page
+    event.preventDefault();
+
     // Infos à envoyer en POST
     let contact = {
         firstName: document.getElementById("firstName").value,
@@ -191,21 +205,18 @@ order.addEventListener("click", (event) => {
         city: document.getElementById("city").value,
         email: document.getElementById("email").value,
     };
-
     // Vérification des informations saisies
     if (
         (firstNameRegEx.test(contact.firstName) == true) &
         (lastNameRegEx.test(contact.lastName) == true) &
         (addressRegEx.test(contact.address) == true) &
-        (cityRegEx.test(contact.city) == true) &
-        (email.test(contact.email) == true) 
+        (cityRegEx.test(contact.city) == true)  &
+        (emailRegEx.test(contact.email) == true)
         ){
-        // Empêcher le rechargement de la page
-        event.preventDefault();
-
+        
         let products = [];
         for (listId of storedProduct) {
-            products.push(listId.id)
+            products.push(listId._id)
         }
 
         // Envoi en POST les produits sélectionnés et le formulaire
