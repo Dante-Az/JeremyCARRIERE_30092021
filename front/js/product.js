@@ -1,4 +1,4 @@
-//Utilisation de URL.SearchParams pour recuperer le paramètre "id"
+// Utilisation de URL.SearchParams pour recuperer le paramètre "id"
 let params = new URL(document.location).searchParams;
 let newId = params.get("id");
 
@@ -16,7 +16,7 @@ function main(){
 }
 
 function getArticle() {
-    //Recuperation de l'url des différents articles en fonction de leurs id
+    // Recuperation de l'url des différents articles en fonction de leurs id
     fetch(`http://localhost:3000/api/products/${newId}`)
         .then(response => response.json())
         .then(data => {
@@ -27,13 +27,13 @@ function getArticle() {
             console.log("erreur : " + erreur)
             alert("Les produits ne sont pas accessibles actuellement")
         });
-        //Fonction pour la création de la page produit
+        // Fonction pour la création de la page produit
         function addCard(product) {
 
-            //Affichage du titre correspondant au nom de l'article
+            // Affichage du titre correspondant au nom de l'article
             document.title = `${product.name}`
 
-            //Affichage de l'image du produit
+            // Affichage de l'image du produit
             
             document.querySelector(".item__img").appendChild(productImg);
             productImg.src = `${product.imageUrl}`;
@@ -53,11 +53,8 @@ function getArticle() {
 
             //Affichage du choix de couleurs
             addColors(product);
-
-            
-
     }
-    //Fonction pour afficher les différentes couleurs de l'article
+    // Fonction pour afficher les différentes couleurs de l'article
     function addColors(product) {
         
         //Boucle pour recuperer les couleurs
@@ -66,39 +63,40 @@ function getArticle() {
         }   
     }
 }    
+// Gestion du local storage
+const addToCartBtn = document.getElementById("addToCart");
+    // Bouton événement pour rajouter la ou les articles
+    addToCartBtn.addEventListener("click", (e) => {
+         e.preventDefault();
+        let productOption = {
 
-    //Gestion du local storage
-    const addToCartBtn = document.getElementById("addToCart");
-            // Bouton événement pour rajouter la ou les articles
-            addToCartBtn.addEventListener("click", (e) => {
-                e.preventDefault();
-                    let productOption = {
-                        //Récupération des valeurs
-                        _id : newId,
-                        name : productName.innerText,
-                        price : parseInt(productPrice.innerText),
-                        image : productImg.src,
-                        quantity : parseInt(quantity.value),
-                        color : colorChoice.value,
-                        alt : productImg.alt,
-                    };
-    //Déclaration de la variable dans laquelle on met les clés et les valeurs qui sont dans le localstorage
-    let addedProduct = JSON.parse(localStorage.getItem("produit")) || [];
-    console.log(addedProduct);
-    //JSON.parse sert à convertir les données au format JSON qui sont sur le local storage en objet Javacript
+        // Récupération des valeurs
+
+            _id : newId,
+            name : productName.innerText,
+            price : parseInt(productPrice.innerText),
+            image : productImg.src,
+            quantity : parseInt(quantity.value),
+            color : colorChoice.value,
+            alt : productImg.alt,
+            };
+// Déclaration de la variable dans laquelle on met les clés et les valeurs qui sont dans le localstorage
+let addedProduct = JSON.parse(localStorage.getItem("produit")) || [];
+console.log(addedProduct);
+// JSON.parse sert à convertir les données au format JSON qui sont sur le local storage en objet Javacript
                    
-    //On vérifie s'il y a déja des produits enregistrés dans le localStorage
-    let isAlreadyPresent = false;
-    let indexModification;
-    for (products of addedProduct) {
-        if (products.color == productOption.color && products.name == productOption.name) {           
-            isAlreadyPresent = true;
-            indexModification = addedProduct.indexOf(products);
+// On vérifie s'il y a déja des produits enregistrés dans le localStorage
+let isAlreadyPresent = false;
+let indexModification;
+for (products of addedProduct) {
+    if (products.color == productOption.color && products.name == productOption.name) {           
+        isAlreadyPresent = true;
+        indexModification = addedProduct.indexOf(products);
         }
     }
-    //Fonction qui va servir à vérifier que les champs couleur et quantité sont renseigné
-    function invalidInputCheck(){ 
-    //Si l'utilisateur a oublié de choisir une couleur
+// Fonction qui va servir à vérifier que les champs couleur et quantité sont renseignés
+function invalidInputCheck(){
+// Si l'utilisateur a oublié de choisir une couleur
     if (productOption.color == "") {
         new Swal({
             title: "Veuillez choisir une couleur valide",

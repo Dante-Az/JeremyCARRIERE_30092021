@@ -16,8 +16,7 @@ function getArticles()  {
     function addCards(data) {
         //boucle pour afficher chaque produit contenue dans l'API dans une carte 
         for (product of data) {
-            // recupere l'élément list dans le HTML
-            const card = document.getElementById("items");
+
             // convertit le prix
             const price = convertPrice(product.price);
 
