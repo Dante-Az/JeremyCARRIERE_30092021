@@ -222,7 +222,7 @@ order.addEventListener("click", (event) => {
         .then(response => response.json())
         .then(data => {
             localStorage.setItem("order", JSON.stringify(data));
-            document.location.href = "confirmation.html";
+            document.location.href = `confirmation.html?orderId=${data.orderId}`;
         })
         .catch(erreur => console.log("erreur : " + erreur));
     }else{
