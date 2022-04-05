@@ -20,6 +20,7 @@ function getArticles()  {
             // convertit le prix
             const price = convertPrice(product.price);
 
+            // On crée les différents éléments de la page
             let productLink = document.createElement("a");
             document.getElementById("items").appendChild(productLink);
             productLink.href = `./product.html?id=${product._id}`;

@@ -2,6 +2,7 @@ let storedProduct = JSON.parse(localStorage.getItem("produit"));
 
 addCartCards();
 
+// Fonction qui crée les éléments du panier
 function addCartCards(){
     for (product of storedProduct) {
         const price = convertPrice(product.price);
@@ -167,8 +168,6 @@ for (let j = 0; j < quantityChange.length; j++){
     })
 }
 console.log(storedProduct);
-console.log(totalPrice);
-console.log(totalQuantity);
 
 // Mise en place des RegEx
 const order = document.getElementById("order");
@@ -180,7 +179,7 @@ console.log(order);
 const firstNameRegEx =/^(?!-)(?!')(?!.*-$)(?!.*'$)([a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+){2,}$/i;
 const lastNameRegEx = /^(?!-)(?!')(?!.*-$)(?!.*'$)((?:[ ]?[a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+)+){2,}$/i;
 const addressRegEx = /^[a-zA-Z0-9\s,.'-]{3,}$/i;
-const cityRegEx = /^([a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+(?:. |-| |'))*[a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]*$/i
+const cityRegEx = /^(?!-)(?!')(?!.*-$)(?!.*'$)([a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+(?:. |-| |'))*[a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]*$/i
 const emailRegEx = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,6}$/;
 
 // On récupère nos balises d'input du formulaire
@@ -341,6 +340,7 @@ order.addEventListener("click", (event) => {
         })
         .catch(erreur => console.log("erreur : " + erreur));       
     }else{
+        // On revérifie les champs
         validFirstName(inputFirstName.value);
         validLastName(inputLastName.value);
         validAddress(inputAddress.value);
