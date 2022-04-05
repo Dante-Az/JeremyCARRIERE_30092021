@@ -121,24 +121,24 @@ for (let i = 0; i < deleteItem.length; i++){
         storedProduct = storedProduct.filter( obj => obj._id !== deletedId || obj.color !== deletedColor);
         console.log(storedProduct);
        
-        // Mise à jour du local storage
-        document.querySelector(`[data-id='${deletedId}']` && `[data-color='${deletedColor}']`).remove();
-        localStorage.setItem("produit", JSON.stringify(storedProduct));
-        actuTotal();
-        new Swal({
-            title: "Le produit a bien été supprimé",
-            icon: "success",
-            iconColor: "#3498db",
-            showConfirmButton: false,
-            timer: 2000,
-          });
-        }
+    // Mise à jour du local storage
+    document.querySelector(`[data-id='${deletedId}'][data-color='${deletedColor}']`).remove();
+    localStorage.setItem("produit", JSON.stringify(storedProduct));
+    actuTotal();
+    new Swal({
+        title: "Le produit a bien été supprimé",
+        icon: "success",
+        iconColor: "#3498db",
+        showConfirmButton: false,
+        timer: 2000,
+        });
+    }
 }
 // Ecoute du changement de quantité de produit
 
 let quantityChange = document.querySelectorAll(".itemQuantity");
 
-for (let j = 0; j < quantityChange.length; j ++){
+for (let j = 0; j < quantityChange.length; j++){
     quantityChange[j].addEventListener("change", () =>{
         
         storedProduct[j].quantity = quantityChange[j].value;
@@ -150,7 +150,7 @@ for (let j = 0; j < quantityChange.length; j ++){
             storedProduct = storedProduct.filter( obj => obj.name !== deletedId || obj.color !== deletedColor);
             console.log(storedProduct);
             // Mise à jour du local storage
-            document.querySelector(`[data-id='${deletedId}']` && `[data-color='${deletedColor}']`).remove();
+            document.querySelector(`[data-id='${deletedId}'][data-color='${deletedColor}']`).remove();
             localStorage.setItem("produit", JSON.stringify(storedProduct));
             actuTotal();
             new Swal({
@@ -174,17 +174,128 @@ console.log(totalQuantity);
 const order = document.getElementById("order");
 console.log(order);
 
-//Validation du formulaire
-const firstNameRegEx =/^([a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+)$/gmi;
-const lastNameRegEx = /^(([a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+)+)$/gmi;
-const addressRegEx = /^[a-zA-Z0-9\s,.'-]{3,}$/gmi;
-const cityRegEx = /^([a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+(?:. |-| |'))*[a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]*$/gmi
-const emailRegEx = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
+// Validation du formulaire
 
-order.addEventListener("click", (event) => {
-    // Empêcher le rechargement de la page
-    event.preventDefault();
+// On définit les regEX que l'utilisateur va devoir respecter pour valider le formulaire
+const firstNameRegEx =/^(?!-)(?!')(?!.*-$)(?!.*'$)([a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+){2,}$/i;
+const lastNameRegEx = /^(?!-)(?!')(?!.*-$)(?!.*'$)((?:[ ]?[a-zA-Z'\-àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+)+){2,}$/i;
+const addressRegEx = /^[a-zA-Z0-9\s,.'-]{3,}$/i;
+const cityRegEx = /^([a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]+(?:. |-| |'))*[a-zA-Z\àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]*$/i
+const emailRegEx = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,6}$/;
 
+// On récupère nos balises d'input du formulaire
+let inputFirstName = document.querySelectorAll(
+    ".cart__order__form__question input"
+  )[0];
+let inputLastName = document.querySelectorAll(
+    ".cart__order__form__question input"
+  )[1];
+let inputAddress = document.querySelectorAll(
+    ".cart__order__form__question input"
+  )[2];
+let inputCity = document.querySelectorAll(
+    ".cart__order__form__question input"
+  )[3];
+let inputEmail = document.querySelectorAll(
+    ".cart__order__form__question input"
+  )[4];
+
+// EventListener qui surveille le changement du prénom
+inputFirstName.addEventListener("change", (e) => {
+    validFirstName(e.target.value);
+    contact.firstName = e.target.value;
+  });
+  // EventListener qui surveille le changement du nom de famille
+  inputLastName.addEventListener("change", (e) => {
+    validLastName(e.target.value);
+    contact.lastName = e.target.value;
+  });
+  // EventListener qui surveille le changement de l'adresse
+  inputAddress.addEventListener("change", (e) => {
+    validAddress(e.target.value);
+    contact.address = e.target.value;
+  });
+  // EventListener qui surveille le changement de la ville
+  inputCity.addEventListener("change", (e) => {
+    validCity(e.target.value);
+    contact.city = e.target.value;
+  });
+  // EventListener qui surveille le changement de l'email
+  inputEmail.addEventListener("change", (e) => {
+    validEmail(e.target.value);
+    contact.email = e.target.value;
+  });
+
+// On récupère les balises d'erreurs
+let firstNameErr = document.getElementById("firstNameErrorMsg");
+let lastNameErr = document.getElementById("lastNameErrorMsg");
+let addressErr = document.getElementById("addressErrorMsg");
+let cityErr = document.getElementById("cityErrorMsg");
+let emailErr = document.getElementById("emailErrorMsg");
+
+validForm = false;
+
+// Fonction pour afficher les messages d'erreur
+function validFirstName(firstName){
+    if(firstName.length == 0){
+        firstNameErr.innerHTML = "Votre prénom n'est pas renseigné";
+        validForm = false;
+    }else if (firstNameRegEx.test(firstName)) {
+        firstNameErr.innerText = "";
+        validForm = true;
+      }else{
+        firstNameErr.innerText = "Votre prénom ne doit pas commencer ou finir par un symbole et doit contenir au moins 2 lettres";
+        validForm = false;  
+    }
+}
+function validLastName(lastName){
+    if(lastName.length == 0){
+        lastNameErr.innerHTML = "Votre nom n'est pas renseigné";
+        validForm = false;
+    }else if (lastNameRegEx.test(lastName)) {
+        lastNameErr.innerText = "";
+        validForm = true;
+      }else{
+        lastNameErr.innerText = "Votre nom ne doit pas commencer ou finir par un symbole et doit contenir au moins 2 lettres";
+        validForm = false;  
+    }
+}
+function validAddress(address){
+    if(address.length == 0){
+        addressErr.innerHTML = "Votre adresse n'est pas renseignée";
+        validForm = false;
+    }else if(addressRegEx.test(address)) {
+        addressErr.innerText = "";
+        validForm = true;
+    }else{
+        addressErr.innerText = "Cette adresse n'est pas valide";
+        validForm = false;  
+    }
+}
+function validCity(city){
+    if(city.length == 0){
+        cityErr.innerHTML = "Votre ville n'est pas renseignée";
+        validForm = false;
+    }else if(cityRegEx.test(city)) {
+        cityErr.innerText = "";
+        validForm = true;
+    }else{
+        cityErr.innerText = "Ce nom de ville n'est pas valide";
+        validForm = false;  
+    }
+}
+function validEmail(email){
+    if(email.length == 0){
+        emailErr.innerHTML = "Votre email n'est pas renseigné";
+        validForm = false;
+    }else if(emailRegEx.test(email)) {
+        emailErr.innerText = "";
+        validForm = true;
+    }else{
+        emailErr.innerText = "Votre email n'est pas valide";
+        validForm = false;  
+    }
+}
     // Infos à envoyer en POST
     let contact = {
         firstName: document.getElementById("firstName").value,
@@ -193,14 +304,18 @@ order.addEventListener("click", (event) => {
         city: document.getElementById("city").value,
         email: document.getElementById("email").value,
     };
+order.addEventListener("click", (event) => {
+    // Empêcher le rechargement de la page
+    event.preventDefault();
+
+
     // Vérification des informations saisies
-    if (
-        (firstNameRegEx.test(contact.firstName) == true) &
-        (lastNameRegEx.test(contact.lastName) == true) &
-        (addressRegEx.test(contact.address) == true) &
-        (cityRegEx.test(contact.city) == true)  &
-        (emailRegEx.test(contact.email) == true)
-        ){
+    if ((validForm) &
+    (firstNameRegEx.test(contact.firstName) == true) &
+    (lastNameRegEx.test(contact.lastName) == true) &
+    (addressRegEx.test(contact.address) == true) &
+    (cityRegEx.test(contact.city) == true)  &
+    (emailRegEx.test(contact.email) == true)){
         
         let products = [];
         for (listId of storedProduct) {
@@ -224,8 +339,12 @@ order.addEventListener("click", (event) => {
             localStorage.setItem("order", JSON.stringify(data));
             document.location.href = `confirmation.html?orderId=${data.orderId}`;
         })
-        .catch(erreur => console.log("erreur : " + erreur));
+        .catch(erreur => console.log("erreur : " + erreur));       
     }else{
-        alert("Certaines informations saisies ne sont pas conformes");
+        validFirstName(inputFirstName.value);
+        validLastName(inputLastName.value);
+        validAddress(inputAddress.value);
+        validCity(inputCity.value);
+        validEmail(inputEmail.value);
     }
 })
